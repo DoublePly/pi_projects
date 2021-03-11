@@ -87,7 +87,7 @@ while True:
   y = abs(y)
   z = abs(z)
   
-  if x > 1 or y > 1 or z > 1:
+  if x > 1.5 or y > 1.5 or z > 1.5:
     #set the dice display at random should the sense hat detect a certain level of movement. 
     
     sense.set_pixels(random.choice(dice_list))
