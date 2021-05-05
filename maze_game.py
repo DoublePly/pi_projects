@@ -4,6 +4,8 @@ from time import sleep
 sense = SenseHat()
 sense.clear()
 
+
+#Variables for colours for LED display
 r = (255,0,0)
 b = (0,0,0)
 w = (255,255,255)
@@ -28,6 +30,8 @@ maze = [
 
 game_over = False
 
+#Depending on the pitch and roll values obtained by the sensors, this function increments or decrements the x or y value of the marble's position accordingly.
+
 def move_marble(pitch, roll, x, y):
     new_x = x
     new_y = y
@@ -42,6 +46,8 @@ def move_marble(pitch, roll, x, y):
     new_x, new_y = check_wall(x,y,new_x,new_y)
     return new_x,new_y
 
+#This function ensures that the marble collides with the 'wall'.
+
 def check_wall(x,y,new_x,new_y):
     if maze[new_y][new_x] != r:
         return new_x, new_y
@@ -51,6 +57,8 @@ def check_wall(x,y,new_x,new_y):
         return new_x, y
     else:
         return x,y
+
+#Loop that ensures that the game continues to run unless the marble has hit the winning marker, or if it has unfortunately hit the losing markers
 
 while game_over == False:
     pitch = sense.get_orientation()["pitch"]
