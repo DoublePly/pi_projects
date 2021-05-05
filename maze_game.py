@@ -6,6 +6,7 @@ sense.clear()
 
 
 #Variables for colours for LED display
+
 r = (255,0,0)
 b = (0,0,0)
 w = (255,255,255)
