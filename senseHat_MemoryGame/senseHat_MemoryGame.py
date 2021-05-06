@@ -6,6 +6,10 @@ import random
 sense = SenseHat()
 sense.clear()
 
+# Instructions for use: When presented the choices to guess from; the order of the words presented can be selected by pressing
+# "Left", "Up", "Right", and "Down" respectively.
+
+
 # Variables for RGB values for LED display
 
 a = (0,0,0)
