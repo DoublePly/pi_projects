@@ -18,36 +18,47 @@ g = (0,255,0)
 
 char_meaning = None
 char_pronounce = None
-display_char =[]
+
 extra_meaning = ['sugar','milk','tea','coffee','water','I','love','one','two','three','four','five']
 extra_pronunciation = ['ng5','sei3','ji6','jat1','siu2','do1','luk6','tong4','bui1','ngo5','oi3']
 game_meaning_list = []
 game_pronunciation_list =[]
+points_counter = 0
+row_counter = 0
+max_rows = 0
+points_aim = 0
 
 # The following function loads a character, its meaning, and pronunciation from the CSV file.
 
-def load_character():
-    global display_char
+def load_character(row_number):
+    
     global char_meaning
     global char_pronounce
+    global max_rows
     with open('cantonese_characters.txt') as csv_file:
         csv_reader = csv.reader(csv_file)
-        line_count = 0
-        for row in csv_file:
-            hold_list = row.split(",")
-            for item in hold_list:
-                if item == 'a':
-                    item = display_char.append(a)
-                if item == 'b':
-                    item = display_char.append(b)
-            char_meaning = hold_list[64]
-            char_pronounce = hold_list[65]
-            print (display_char)
-            print (len(display_char))
-            sense.set_pixels(display_char)
-            time.sleep(3)
-            sense.clear()
-            print (char_meaning)
+        rows = list(csv_reader)
+        max_rows = len(rows)
+        print(rows)
+        hold_list = rows[row_number]
+        temp_display_char = hold_list
+        print(temp_display_char)
+        display_char = []
+        char_pronounce = temp_display_char.pop(65)
+        char_meaning = temp_display_char.pop(64)
+        for item in temp_display_char:
+            if item == 'a':
+                display_char.append(a)
+            if item =='b':
+                display_char.append(b)
+        #char_meaning = hold_list[64]
+        #char_pronounce = hold_list[65]
+        print (display_char)
+        print (len(display_char))
+        sense.set_pixels(display_char)
+        time.sleep(3)
+        sense.clear()
+        print (char_meaning)
 
 # The function that sets up the list of meanings to be used by the game.
 
@@ -80,39 +91,49 @@ def create_pronunciation_list():
     print (game_pronunciation_list)
     
 def pronunciation_game():
-    load_character()
-    create_pronunciation_list()
+    global points_counter
+    global row_counter
     
-    for i in game_pronunciation_list:
-        sense.show_message(i)
-    sense.show_message("Pick the correct answer!")
-    minigame_over = False
-    while minigame_over == False:
-        for event in sense.stick.get_events():
-            if event.action == "pressed":
-                if pronunciation_outcome(event.direction) == True:
-                    sense.show_message("Right", text_colour=(g), back_colour=(u))
-                    minigame_over = True
-                else:
-                    sense.show_message("Wrong", text_colour=(r), back_colour=(u))
     
+    for x in range(0, 5):
+        load_character(row_counter)
+        create_pronunciation_list()
+        for i in game_pronunciation_list:
+            sense.show_message(i)
+        sense.show_message("Pick!", scroll_speed=0.05)
+        event_occured = False
+        while event_occured == False:
+            
+            for event in sense.stick.get_events():
+                if event.action == "pressed":
+                    if pronunciation_outcome(event.direction) == True:
+                        sense.show_message("Right", text_colour=(g), back_colour=(u), scroll_speed=0.05)
+                        points_counter ++ 1
+                        row_counter ++ 1
+                        event_occured = True
+                    else:
+                        sense.show_message("Wrong", text_colour=(r), back_colour=(u), scroll_speed=0.05)
+                        row_counter = ++ 1
+                        event_occured = True
 
 def meaning_game():
-    load_character()
-    create_meaning_list()
-    for i in game_meaning_list:
-        sense.show_message(i)
-    sense.show_message("Pick the correct answer!")
+    global points_counter
     minigame_over = False
     while minigame_over == False:
+        load_character()
+        create_meaning_list()
+        for i in game_meaning_list:
+            sense.show_message(i)
+        sense.show_message("Pick!", scroll_speed=0.05)
+        event = sense.stick.wait_for_event()
         for event in sense.stick.get_events():
             if event.action == "pressed":
                 
                 if meaning_outcome(event.direction) == True:
-                    sense.show_message("Right",text_colour=(g), back_colour=(u))
+                    sense.show_message("Right",text_colour=(g), back_colour=(u), scroll_speed=0.05)
                     minigame_over = True
                 else:
-                    sense.show_message("Wrong", text_colour=(r), back_colour=(u))
+                    sense.show_message("Wrong", text_colour=(r), back_colour=(u), scroll_speed=0.05)
 
 def pronunciation_outcome(direction):
     
@@ -131,7 +152,7 @@ def meaning_outcome(direction):
     #Get the index of the correct answer.
     
     index = game_meaning_list.index(char_meaning)
-    print(index)
+    
     if index == input_Parser(direction):
         return True
     else:
@@ -151,29 +172,31 @@ def input_Parser(input):
     elif input == "down":
         return 3
         
+        
+def game_rules():
+    sense.show_message("Cantonese Memory Game! To select answers use the joystick: Left,Up, Down, Right correspond to the order in which the choices are shown.Now pick a mode: Left for Pronunciation. Right for Meaning.", scroll_speed=0.05)
+
+
 game_over = False
-
-
-
-
+game_rules()
 
 while game_over == False:
-    
-    #sense.show_message("Pick a Game Mode")
-    
+    points_counter
     for event in sense.stick.get_events():
+        
         if event.action == "pressed":
             
             #Check Direction
             
             if event.direction == "left":
-                sense.show_message("Pronunciation practice!")
+                sense.show_message("Pronunciation practice!", scroll_speed=0.05)
                 pronunciation_game()
             if event.direction == "right":
-                sense.show_message("Meaning practice!")
+                sense.show_message("Meaning practice!", scroll_speed=0.05)
                 meaning_game()
                 
             
             sense.clear()
         
+
 
