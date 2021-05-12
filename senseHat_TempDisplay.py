@@ -46,7 +46,7 @@ sense.set_pixels(display)
 
 # A function to obtain the current temperature and convert the returned float value into an int value.
 
-def getTemp():
+def get_Temp():
     global currentTemp
     currentTemp = int(sense.get_temperature_from_humidity())
 
@@ -54,7 +54,7 @@ def getTemp():
 # list column by column, moving each current colour value over to the left by one (to give the appearance of a constant running line
 # on the LED display. The first column is wiped completely as they've hit the edge of the screen.)
     
-def alterDisplay():
+def alter_Display():
     global display
     global columnOne
     global columnTwo
@@ -111,7 +111,7 @@ def alterDisplay():
 
 while True:
     time.sleep(0.2)
-    getTemp()
+    get_Temp()
     if currentTemp < 5:
         display[55] = y
     elif currentTemp > 5 and currentTemp < 10:
@@ -125,7 +125,7 @@ while True:
     elif currentTemp > 25:
         display[15] = r
     sense.set_pixels(display)
-    alterDisplay()
+    alter_Display()
     
     
         
