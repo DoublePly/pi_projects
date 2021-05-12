@@ -56,14 +56,6 @@ def get_Temp():
     
 def alter_Display():
     global display
-    global columnOne
-    global columnTwo
-    global columnThree
-    global columnFour
-    global columnFive
-    global columnSix
-    global columnSeven
-    global columnEight
     
     displayCopy = display
     for item in columnOne:
